@@ -1,0 +1,25 @@
+{
+  "name": "company-management",
+  "version": "1.0.0",
+  "description": "A simple REST API to simulate employee managment in a fictional company utilizing PostgreSQL",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "test",
+    "dev": "concurrently \"npx tsc -w\" \"nodemon dist/index.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tpalinski/company-management.git"
+  },
+  "author": "Tymoteusz Paliński",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tpalinski/company-management/issues"
+  },
+  "homepage": "https://github.com/tpalinski/company-management#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20",
+    "typescript": "^4.9.5"
+  }
+}
