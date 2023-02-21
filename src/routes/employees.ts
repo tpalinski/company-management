@@ -1,10 +1,10 @@
 import Express, { NextFunction, Request, Response } from "express";
 import { getEmployee, getEmployees } from "../db";
 
-export const employeeRouter = Express();
+export const employeesRouter = Express();
 
 
-employeeRouter.get('/', async (req: Request, res: Response) => {
+employeesRouter.get('/', async (req: Request, res: Response) => {
     let employees = await getEmployees();
     if(employees){
         res.send(employees.rows);
@@ -13,19 +13,19 @@ employeeRouter.get('/', async (req: Request, res: Response) => {
     }
 })
 
-employeeRouter.use('/:pesel(\\d{11})', async (req: Request, res: Response, next: NextFunction) => {
+employeesRouter.use('/:pesel(\\d{11})', async (req: Request, res: Response, next: NextFunction) => {
     let employee = await getEmployee(parseInt(req.params.pesel));
     if (employee) {
         //@ts-expect-error
         req.employee = employee;
-        console.log(employee);
         next()
     } else {
-        res.status(400).send();
+        res.status(400).send("No such employee");
     }
 })
 
-employeeRouter.get('/:pesel', (req: Request, res: Response) => {
+employeesRouter.get('/:pesel', (req: Request, res: Response) => {
     //@ts-expect-error
     res.send(req.employee);
 })
+

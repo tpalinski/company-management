@@ -41,3 +41,14 @@ describe("GET /api/employees", () => {
         expect(response.status).toBe(200);
     })
 })
+
+describe("GET /api/employees/:pesel", () => {
+    test("Should return valid employee", async () => {
+        const response = await request.get('/api/employees/11111111111');
+        expect(response.body).toHaveProperty("pesel")
+    })
+    test("Should return status 404 with invalid employee", async () => {
+        const response = await request.get('/api/employees/10000000000');
+        expect(response.status).toBe(400);
+    })
+})

@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.employeeRouter = void 0;
+exports.employeesRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const db_1 = require("../db");
-exports.employeeRouter = (0, express_1.default)();
-exports.employeeRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.employeesRouter = (0, express_1.default)();
+exports.employeesRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let employees = yield (0, db_1.getEmployees)();
     if (employees) {
         res.send(employees.rows);
@@ -25,19 +25,18 @@ exports.employeeRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(502).send("Error while fetching employees");
     }
 }));
-exports.employeeRouter.use('/:pesel(\\d{11})', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.employeesRouter.use('/:pesel(\\d{11})', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let employee = yield (0, db_1.getEmployee)(parseInt(req.params.pesel));
     if (employee) {
         //@ts-expect-error
         req.employee = employee;
-        console.log(employee);
         next();
     }
     else {
-        res.status(400).send();
+        res.status(400).send("No such employee");
     }
 }));
-exports.employeeRouter.get('/:pesel', (req, res) => {
+exports.employeesRouter.get('/:pesel', (req, res) => {
     //@ts-expect-error
     res.send(req.employee);
 });
