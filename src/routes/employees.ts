@@ -1,5 +1,6 @@
 import Express, { NextFunction, Request, Response } from "express";
 import { getEmployee, getEmployees } from "../db";
+import { employeeRouter } from "./employee";
 
 export const employeesRouter = Express();
 
@@ -25,7 +26,13 @@ employeesRouter.use('/:pesel(\\d{11})', async (req: Request, res: Response, next
 })
 
 employeesRouter.get('/:pesel', (req: Request, res: Response) => {
-    //@ts-expect-error
-    res.send(req.employee);
+    if("employee" in req) {
+        res.send(req.employee);
+    } else {
+        res.status(400).send("No such employee")
+    }
+        
 })
+
+employeesRouter.use('/:pesel(\\d{11})', employeeRouter)
 

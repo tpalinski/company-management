@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEmployee = exports.getEmployees = exports.connectToDatabase = void 0;
+exports.getEmployeeProjects = exports.getEmployee = exports.getEmployees = exports.connectToDatabase = void 0;
 const pg_1 = require("pg");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -21,7 +21,8 @@ const pool = new pg_1.Pool({
     user: process.env.DB_USER,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    port: parseInt(process.env.DB_PORT || "5432")
+    port: parseInt(process.env.DB_PORT || "5432"),
+    keepAlive: true
 });
 const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     let tries = 5;
@@ -62,3 +63,17 @@ const getEmployee = (pesel) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getEmployee = getEmployee;
+const getEmployeeProjects = (pesel) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = "SELECT Projects.NAME, Projects.DESCRIPTION FROM Projects \
+    RIGHT JOIN EmployeesProjects ON EmployeesProjects.PROJECT = Projects.ID\
+    WHERE EmployeesProjects.EMPLOYEE = $1";
+    try {
+        const res = yield pool.query(query, [pesel]);
+        return res.rows;
+    }
+    catch (err) {
+        console.error(err);
+        return null;
+    }
+});
+exports.getEmployeeProjects = getEmployeeProjects;

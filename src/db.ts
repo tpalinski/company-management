@@ -8,7 +8,8 @@ const pool = new Pool({
     user: process.env.DB_USER,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    port: parseInt(process.env.DB_PORT || "5432")
+    port: parseInt(process.env.DB_PORT || "5432"),
+    keepAlive: true
 })
 
 
@@ -42,6 +43,19 @@ export const getEmployee = async (pesel: number): Promise<QueryResult<any> | nul
     try {
         const res = await pool.query(query,[pesel])
         return res.rows[0];
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
+export const getEmployeeProjects = async (pesel: number): Promise<any[]| null> => {
+    const query = "SELECT Projects.NAME, Projects.DESCRIPTION FROM Projects \
+    RIGHT JOIN EmployeesProjects ON EmployeesProjects.PROJECT = Projects.ID\
+    WHERE EmployeesProjects.EMPLOYEE = $1"
+    try {
+        const res = await pool.query(query, [pesel])
+        return res.rows;
     } catch (err) {
         console.error(err);
         return null;
