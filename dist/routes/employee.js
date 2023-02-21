@@ -17,8 +17,7 @@ const express_1 = __importDefault(require("express"));
 const db_1 = require("../db");
 exports.employeeRouter = (0, express_1.default)();
 exports.employeeRouter.get('/projects', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if ("employee" in req) {
-        //@ts-expect-error
+    if (req.employee) {
         const projects = yield (0, db_1.getEmployeeProjects)(parseInt(req.employee.pesel));
         if (projects) {
             res.send(projects);
@@ -27,4 +26,8 @@ exports.employeeRouter.get('/projects', (req, res) => __awaiter(void 0, void 0, 
             res.status(404).send();
         }
     }
+    else {
+        res.status(502).send();
+    }
 }));
+exports.employeeRouter.get('/supervisor');
