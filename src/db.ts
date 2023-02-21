@@ -36,3 +36,14 @@ export const getEmployees = async (): Promise<QueryResult<any> | null> => {
         return null;
     }
 }
+
+export const getEmployee = async (pesel: number): Promise<QueryResult<any> | null> => {
+    const query = "SELECT * FROM Employees WHERE PESEL=$1";
+    try {
+        const res = await pool.query(query,[pesel])
+        return res.rows[0];
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}

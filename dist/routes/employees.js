@@ -25,3 +25,19 @@ exports.employeeRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(502).send("Error while fetching employees");
     }
 }));
+exports.employeeRouter.use('/:pesel(\\d{11})', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let employee = yield (0, db_1.getEmployee)(parseInt(req.params.pesel));
+    if (employee) {
+        //@ts-expect-error
+        req.employee = employee;
+        console.log(employee);
+        next();
+    }
+    else {
+        res.status(400).send();
+    }
+}));
+exports.employeeRouter.get('/:pesel', (req, res) => {
+    //@ts-expect-error
+    res.send(req.employee);
+});
