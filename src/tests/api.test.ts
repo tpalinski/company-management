@@ -52,3 +52,14 @@ describe("GET /api/employees/:pesel", () => {
         expect(response.status).toBe(400);
     })
 })
+
+describe("GET /api/employees/:pesel/projects", () => {
+    test("Should return valid list of projects", async () => {
+        const response = await request.get('/api/employees/11111111112/projects');
+        expect(response.body).toBeTruthy();
+    })
+    test("Should return status 400 with invalid employee", async () => {
+        const response = await request.get('/api/employees/10000000000/projects');
+        expect(response.status).toBe(400);
+    })
+})
