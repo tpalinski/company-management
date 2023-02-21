@@ -1,4 +1,4 @@
-import {Pool} from "pg";
+import {Pool, QueryResult} from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -24,5 +24,16 @@ export const connectToDatabase = async () => {
             tries--;
             await new Promise(res => setTimeout(res, 5000));
         }
+    }
+}
+
+export const getEmployees = async (): Promise<QueryResult<any> | null> => {
+    const query = "SELECT * FROM Employees";
+    try {
+        const res = await pool.query(query);
+        console.log(res);
+        return res;
+    } catch (err) {
+        return null;
     }
 }

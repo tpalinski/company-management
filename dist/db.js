@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectToDatabase = void 0;
+exports.getEmployees = exports.connectToDatabase = void 0;
 const pg_1 = require("pg");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -39,3 +39,15 @@ const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.connectToDatabase = connectToDatabase;
+const getEmployees = () => __awaiter(void 0, void 0, void 0, function* () {
+    const query = "SELECT * FROM Employees";
+    try {
+        const res = yield pool.query(query);
+        console.log(res);
+        return res;
+    }
+    catch (err) {
+        return null;
+    }
+});
+exports.getEmployees = getEmployees;
