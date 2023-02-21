@@ -52,7 +52,10 @@ const getEmployees = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getEmployees = getEmployees;
 const getEmployee = (pesel) => __awaiter(void 0, void 0, void 0, function* () {
-    const query = "SELECT * FROM Employees WHERE PESEL=$1";
+    const query = "Select Employees.PESEL, Employees.NAME, Employees.SURNAME, Employees.ADRESS, \
+                    Employees.EMAIL, Employees.SUPERVISOR, Contracts.NAME as position FROM Employees \
+                    LEFT JOIN Contracts ON Contracts.ID = Employees.Position \
+                    WHERE Employees.PESEL=$1";
     try {
         const res = yield pool.query(query, [pesel]);
         return res.rows[0];

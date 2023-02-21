@@ -39,7 +39,10 @@ export const getEmployees = async (): Promise<QueryResult<any> | null> => {
 }
 
 export const getEmployee = async (pesel: number): Promise<QueryResult<any> | null> => {
-    const query = "SELECT * FROM Employees WHERE PESEL=$1";
+    const query = "Select Employees.PESEL, Employees.NAME, Employees.SURNAME, Employees.ADRESS, \
+                    Employees.EMAIL, Employees.SUPERVISOR, Contracts.NAME as position FROM Employees \
+                    LEFT JOIN Contracts ON Contracts.ID = Employees.Position \
+                    WHERE Employees.PESEL=$1";
     try {
         const res = await pool.query(query,[pesel])
         return res.rows[0];
