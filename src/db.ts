@@ -31,7 +31,6 @@ export const getEmployees = async (): Promise<QueryResult<any> | null> => {
     const query = "SELECT * FROM Employees";
     try {
         const res = await pool.query(query);
-        console.log(res);
         return res;
     } catch (err) {
         return null;

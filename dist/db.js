@@ -43,7 +43,6 @@ const getEmployees = () => __awaiter(void 0, void 0, void 0, function* () {
     const query = "SELECT * FROM Employees";
     try {
         const res = yield pool.query(query);
-        console.log(res);
         return res;
     }
     catch (err) {
