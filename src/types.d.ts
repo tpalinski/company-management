@@ -8,7 +8,7 @@ export type Employee = {
     surname: string,
     adress: string,
     email: string,
-    supervisor: string | number | null,
+    supervisor: string | null,
     position: string
 }
 declare global{

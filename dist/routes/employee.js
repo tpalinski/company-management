@@ -30,4 +30,14 @@ exports.employeeRouter.get('/projects', (req, res) => __awaiter(void 0, void 0, 
         res.status(502).send();
     }
 }));
-exports.employeeRouter.get('/supervisor');
+exports.employeeRouter.get('/supervisor', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.employee) {
+        if (req.employee.supervisor == null) {
+            res.status(201).send({});
+        }
+        else {
+            const supervisor = yield (0, db_1.getEmployee)(parseInt(req.employee.supervisor));
+            res.status(200).json(supervisor);
+        }
+    }
+}));
