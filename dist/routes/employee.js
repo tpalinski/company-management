@@ -20,7 +20,7 @@ exports.employeeRouter.get('/projects', (req, res) => __awaiter(void 0, void 0, 
     if (req.employee) {
         const projects = yield (0, db_1.getEmployeeProjects)(parseInt(req.employee.pesel));
         if (projects) {
-            res.send(projects);
+            res.json(projects);
         }
         else {
             res.status(404).send();

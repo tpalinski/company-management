@@ -8,7 +8,7 @@ export const employeesRouter = Express();
 employeesRouter.get('/', async (req: Request, res: Response) => {
     let employees = await getEmployees();
     if(employees){
-        res.send(employees.rows);
+        res.json(employees.rows);
     } else {
         res.status(502).send("Error while fetching employees");
     }
@@ -27,7 +27,7 @@ employeesRouter.use('/:pesel(\\d{11})', async (req: Request, res: Response, next
 
 employeesRouter.get('/:pesel', (req: Request, res: Response) => {
     if("employee" in req) {
-        res.send(req.employee);
+        res.json(req.employee);
     } else {
         res.status(400).send("No such employee")
     }

@@ -8,7 +8,7 @@ employeeRouter.get('/projects', async (req: Request, res: Response) => {
     if(req.employee){
         const projects = await getEmployeeProjects(parseInt(req.employee.pesel));
         if(projects){
-            res.send(projects);
+            res.json(projects);
         } else {
             res.status(404).send();
         }

@@ -20,7 +20,7 @@ exports.employeesRouter = (0, express_1.default)();
 exports.employeesRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let employees = yield (0, db_1.getEmployees)();
     if (employees) {
-        res.send(employees.rows);
+        res.json(employees.rows);
     }
     else {
         res.status(502).send("Error while fetching employees");
@@ -39,7 +39,7 @@ exports.employeesRouter.use('/:pesel(\\d{11})', (req, res, next) => __awaiter(vo
 }));
 exports.employeesRouter.get('/:pesel', (req, res) => {
     if ("employee" in req) {
-        res.send(req.employee);
+        res.json(req.employee);
     }
     else {
         res.status(400).send("No such employee");
