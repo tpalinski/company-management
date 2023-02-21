@@ -4,7 +4,7 @@
   "description": "A simple REST API to simulate employee managment in a fictional company utilizing PostgreSQL",
   "main": "dist/index.js",
   "scripts": {
-    "test": "test",
+    "test": "jest",
     "dev": "concurrently \"npx tsc -w\" \"nodemon dist/index.js\""
   },
   "repository": {
@@ -27,6 +27,11 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
-    "@types/pg": "^8.6.6"
+    "@types/jest": "^29.4.0",
+    "@types/pg": "^8.6.6",
+    "@types/supertest": "^2.0.12",
+    "jest": "^29.4.3",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.0.5"
   }
 }
