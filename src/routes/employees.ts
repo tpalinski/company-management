@@ -14,6 +14,10 @@ employeesRouter.get('/', async (req: Request, res: Response) => {
     }
 })
 
+employeesRouter.post('/add',async (req: Request, res: Response) => {
+    res.status(502).send(req.body);
+})
+
 employeesRouter.use('/:pesel(\\d{11})', async (req: Request, res: Response, next: NextFunction) => {
     let employee = await getEmployee(parseInt(req.params.pesel));
     if (employee) {

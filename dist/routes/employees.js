@@ -26,6 +26,9 @@ exports.employeesRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0,
         res.status(502).send("Error while fetching employees");
     }
 }));
+exports.employeesRouter.post('/add', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(502).send(req.body);
+}));
 exports.employeesRouter.use('/:pesel(\\d{11})', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let employee = yield (0, db_1.getEmployee)(parseInt(req.params.pesel));
     if (employee) {
