@@ -15,8 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.employeesRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const db_1 = require("../db");
+const validation_1 = require("../util/validation");
 const employee_1 = require("./employee");
 exports.employeesRouter = (0, express_1.default)();
+const parseEmployeeJSON = (req, res, next) => {
+    const employee = (0, validation_1.validateEmployee)(req.body);
+    if (employee) {
+        req.employee = employee;
+        next();
+    }
+    else {
+        res.status(400).send();
+    }
+};
 exports.employeesRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let employees = yield (0, db_1.getEmployees)();
     if (employees) {
@@ -26,8 +37,11 @@ exports.employeesRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0,
         res.status(502).send("Error while fetching employees");
     }
 }));
-exports.employeesRouter.post('/add', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(502).send(req.body);
+exports.employeesRouter.post('/add', parseEmployeeJSON, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(201).send(req.employee);
+}));
+exports.employeesRouter.put('/update', parseEmployeeJSON, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(201).send(req.employee);
 }));
 exports.employeesRouter.use('/:pesel(\\d{11})', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let employee = yield (0, db_1.getEmployee)(parseInt(req.params.pesel));

@@ -1,9 +1,19 @@
 import Express, { NextFunction, Request, Response } from "express";
 import { getEmployee, getEmployees } from "../db";
+import { validateEmployee } from "../util/validation";
 import { employeeRouter } from "./employee";
 
 export const employeesRouter = Express();
 
+const parseEmployeeJSON = (req: Request, res: Response, next: NextFunction) => {
+    const employee = validateEmployee(req.body);
+    if(employee){
+        req.employee = employee
+        next()
+    } else {
+        res.status(400).send()
+    }
+}
 
 employeesRouter.get('/', async (req: Request, res: Response) => {
     let employees = await getEmployees();
@@ -14,8 +24,12 @@ employeesRouter.get('/', async (req: Request, res: Response) => {
     }
 })
 
-employeesRouter.post('/add',async (req: Request, res: Response) => {
-    res.status(502).send(req.body);
+employeesRouter.post('/add',parseEmployeeJSON, async (req: Request, res: Response) => {
+    res.status(201).send(req.employee);
+})
+
+employeesRouter.put('/update', parseEmployeeJSON ,async (req: Request, res: Response) => {
+    res.status(201).send(req.employee);
 })
 
 employeesRouter.use('/:pesel(\\d{11})', async (req: Request, res: Response, next: NextFunction) => {
