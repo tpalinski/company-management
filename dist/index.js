@@ -7,9 +7,12 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const db_1 = require("./db");
 const router_1 = require("./router");
+const body_parser_1 = __importDefault(require("body-parser"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 (0, db_1.connectToDatabase)();
+// middleware setup
+app.use(body_parser_1.default.json());
 const PORT = process.env.PORT || 3001;
 app.use('/api', router_1.router);
 app.get('/', (req, res, next) => {
