@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { connectToDatabase } from "./db";
 import { router } from "./router";
 import bodyParser from "body-parser";
+import helmet from "helmet";
 
 
 const app = Express();
@@ -10,7 +11,10 @@ dotenv.config();
 connectToDatabase();
 
 // middleware setup
+app.use(helmet())
 app.use(bodyParser.json())
+
+
 const PORT = process.env.PORT || 3001;
 
 app.use('/api', router);
