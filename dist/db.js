@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEmployeeProjects = exports.getEmployee = exports.getEmployees = exports.connectToDatabase = void 0;
+exports.insertEmployee = exports.checkEmployee = exports.getEmployeeProjects = exports.getEmployee = exports.getEmployees = exports.connectToDatabase = void 0;
 const pg_1 = require("pg");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -80,3 +80,28 @@ const getEmployeeProjects = (pesel) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getEmployeeProjects = getEmployeeProjects;
+const checkEmployee = (pesel) => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield (0, exports.getEmployee)(pesel);
+    if (res && "pesel" in res) {
+        return true;
+    }
+    return false;
+});
+exports.checkEmployee = checkEmployee;
+const insertEmployee = (employee) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = "INSERT INTO Employees(PESEL, Name, Surname, Adress, Email, Supervisor, Position) \
+    VALUES($1, $2, $3, $4, $5, $6, $7)";
+    if (!employee.supervisor)
+        employee.supervisor = "null";
+    const employeeParams = [employee.pesel, employee.name, employee.surname,
+        employee.adress, employee.supervisor, employee.email];
+    try {
+        const res = yield pool.query(query, employeeParams);
+        return employee;
+    }
+    catch (err) {
+        console.error(err);
+        return null;
+    }
+});
+exports.insertEmployee = insertEmployee;

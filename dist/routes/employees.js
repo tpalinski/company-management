@@ -38,7 +38,15 @@ exports.employeesRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0,
     }
 }));
 exports.employeesRouter.post('/add', parseEmployeeJSON, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(201).send(req.employee);
+    if (req.employee) {
+        const isInDb = yield (0, db_1.checkEmployee)(parseInt(req.employee.pesel));
+        if (!isInDb) {
+            const result = yield (0, db_1.insertEmployee)(req.employee);
+            if (!result)
+                throw new Error();
+            res.status(201).send(result);
+        }
+    }
 }));
 exports.employeesRouter.put('/update', parseEmployeeJSON, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(201).send(req.employee);

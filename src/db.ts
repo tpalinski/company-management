@@ -1,5 +1,6 @@
 import {Pool, QueryResult} from "pg";
 import dotenv from "dotenv";
+import { Employee } from "./types";
 
 dotenv.config();
 
@@ -59,6 +60,29 @@ export const getEmployeeProjects = async (pesel: number): Promise<any[]| null> =
     try {
         const res = await pool.query(query, [pesel])
         return res.rows;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
+export const checkEmployee = async (pesel: number) => {
+    const res = await getEmployee(pesel)
+    if(res && "pesel" in res){
+        return true;
+    }
+    return false;
+}
+
+export const insertEmployee = async (employee: Employee): Promise<Employee | null> => {
+    const query = "INSERT INTO Employees(PESEL, Name, Surname, Adress, Email, Supervisor, Position) \
+    VALUES($1, $2, $3, $4, $5, $6, $7)"
+    if(!employee.supervisor) employee.supervisor = "null";
+    const employeeParams: String[] = [employee.pesel, employee.name, employee.surname, 
+                                      employee.adress, employee.supervisor, employee.email];
+    try {
+        const res = await pool.query(query, employeeParams);
+        return employee;
     } catch (err) {
         console.error(err);
         return null;

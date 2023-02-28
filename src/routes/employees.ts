@@ -1,5 +1,5 @@
 import Express, { NextFunction, Request, Response } from "express";
-import { getEmployee, getEmployees } from "../db";
+import { checkEmployee, getEmployee, getEmployees, insertEmployee } from "../db";
 import { validateEmployee } from "../util/validation";
 import { employeeRouter } from "./employee";
 
@@ -25,7 +25,15 @@ employeesRouter.get('/', async (req: Request, res: Response) => {
 })
 
 employeesRouter.post('/add',parseEmployeeJSON, async (req: Request, res: Response) => {
-    res.status(201).send(req.employee);
+    if(req.employee){
+        const isInDb = await checkEmployee(parseInt(req.employee.pesel));
+        if(!isInDb){
+            const result = await insertEmployee(req.employee);
+            if (!result) throw new Error();
+            res.status(201).send(result);
+        }
+    }
+    
 })
 
 employeesRouter.put('/update', parseEmployeeJSON ,async (req: Request, res: Response) => {
